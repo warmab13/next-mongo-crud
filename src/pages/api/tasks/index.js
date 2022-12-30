@@ -1,9 +1,10 @@
-import { dbConnect } from '../../../utils';
+import { dbConnect } from 'utils/mongoose';
+import Task from 'models/Task';
 
 dbConnect();
 
-export default function handler(req, res) {
-
-    res.status(200).json({ name: 'tasks' })
+export default async function handler(req, res) {
+    const tasks = await Task.find();
+    console.log("🚀 ~ file: index.js:8 ~ handler ~ tasks", tasks)
+    res.status(200).json("tasks");
 }
-  
