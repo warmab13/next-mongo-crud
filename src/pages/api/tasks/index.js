@@ -5,18 +5,18 @@ dbConnect();
 
 export default async function handler(req, res) {
 
-    const { method, body } = req
+    const { method, body, id } = req
     
     switch(method){
         case "GET":
             try {
                 const tasks = await Task.find();
-                console.log("🚀 ~ file: index.js:8 ~ handler ~ tasks", tasks)
                 return res.status(200).json(tasks);
             } catch (error) {
                 return res.status(500).json({error: error.message})
             }
         
+
         case "POST":
             try {
                 const newTask = new Task(body);
