@@ -19,4 +19,5 @@ const taskSchema = new Schema({
     versionKey: false
 })
 
-export default model('Task', taskSchema)
+//This solve this error : OverwriteModelError: Cannot overwrite `Task` model once compiled.
+export default models.Task || model('Task', taskSchema)
