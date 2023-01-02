@@ -1,7 +1,10 @@
+import { useRouter } from "next/router";
 import { Button, Card, Container, Grid, GridColumn } from "semantic-ui-react";
 
 export default function HomePage({tasks}) {
 console.log("🚀 ~ file: index.js:2 ~ HomePage ~ tasks", tasks)
+
+  const router = useRouter();
   
   if(tasks.length === 0) return(
     <Grid centered verticalAlign="middle" columns={1} style={{height: "80vh"}}>
@@ -30,7 +33,7 @@ console.log("🚀 ~ file: index.js:2 ~ HomePage ~ tasks", tasks)
                   <Card.Description>{task.description}</Card.Description>
                 </Card.Content>
                 <Card.Content extra>
-                  <Button primary onClick={()=> router.push("")}>View</Button>
+                  <Button primary onClick={()=> router.push(`/tasks/${task._id}`)}>View</Button>
                   <Button primary>Edit</Button>
                 </Card.Content>
               </Card>
