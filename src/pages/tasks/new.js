@@ -1,9 +1,11 @@
 
-import { router } from "next/router";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import { Button, Form, Grid } from "semantic-ui-react";
 
 export default function TaskFormPage() {
+
+  const { query, push } = useRouter();
 
   const [newTask, setNewTask] = useState({
     title: "",
@@ -24,17 +26,6 @@ export default function TaskFormPage() {
     return errors;
   }
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    let errors = validate();
-
-    if(Object.keys(errors).length) return setErrors(errors);
-
-    await createTask();
-
-    await router.push("/");
-  }
-
   const createTask = async() => {
     try {
       await fetch("http://localhost:3000/api/tasks", {
@@ -49,30 +40,71 @@ export default function TaskFormPage() {
     }
   }
 
+  const updateTask = async() => {
+    try {
+      await fetch(`http://localhost:3000/api/tasks/${query.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newTask)
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    let errors = validate();
+
+    if(Object.keys(errors).length) return setErrors(errors);
+
+    if(query.id){
+      await updateTask();
+    }else{
+      await createTask();
+    }
+
+    await push("/");
+  }
+
   const handleChange = (e) => setNewTask({ ...newTask , [e.target.name]: e.target.value})
+
+  const getTask = async ()=>{
+    const res = await fetch(`http://localhost:3000/api/tasks/${query.id}`);
+    const data = await res.json();
+    setNewTask({title: data.title, description: data.description})
+  }
+
+  useEffect(()=>{
+    if(query.id) getTask();
+  }, [])
 
   return (
     <Grid centered verticalAlign="middle" columns={3} style={{ height: "80vh" }}>
       <Grid.Row>
         <Grid.Column>
-          <h1>Create Task</h1>
+          <h1>{query.id ? 'Update Task' : 'Create Task' }</h1>
           <Form onSubmit={handleSubmit}>
             <Form.Input 
               label="Title" 
               placeholder="" 
               name="title" 
               onChange={handleChange}
-              error={errors.title ? {content: errors.title }: null}>
+              error={errors.title ? {content: errors.title }: null}
+              value={newTask.title}>
             </Form.Input>
             <Form.TextArea 
               label="Task" 
               placeholder="" 
               name="description" 
               onChange={handleChange}
-              error={errors.description ? {content: errors.description } : null}>
+              error={errors.description ? {content: errors.description } : null}
+              value={newTask.description}>
 
             </Form.TextArea>
-            <Button primary> Save</Button>
+            <Button primary> {query.id ? 'Update' : 'Create'}</Button>
           </Form>
         </Grid.Column>
       </Grid.Row>

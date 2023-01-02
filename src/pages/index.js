@@ -34,7 +34,7 @@ console.log("🚀 ~ file: index.js:2 ~ HomePage ~ tasks", tasks)
                 </Card.Content>
                 <Card.Content extra>
                   <Button primary onClick={()=> router.push(`/tasks/${task._id}`)}>View</Button>
-                  <Button primary>Edit</Button>
+                  <Button primary  onClick={()=> router.push(`/tasks/${task._id}/edit`)}>Edit</Button>
                 </Card.Content>
               </Card>
             ))
