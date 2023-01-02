@@ -30,7 +30,7 @@ console.log("🚀 ~ file: index.js:2 ~ HomePage ~ tasks", tasks)
                   <Card.Description>{task.description}</Card.Description>
                 </Card.Content>
                 <Card.Content extra>
-                  <Button primary>View</Button>
+                  <Button primary onClick={()=> router.push("")}>View</Button>
                   <Button primary>Edit</Button>
                 </Card.Content>
               </Card>
@@ -49,7 +49,7 @@ export const getServerSideProps = async (ctx)=>{
   //console.log("🚀 ~ file: index.js:11 ~ getServerSideProps ~ tasks", tasks)
   return {
     props: {
-      tasks: []
+      tasks: tasks
     }
   }
 }
